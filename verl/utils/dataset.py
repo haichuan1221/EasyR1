@@ -20,7 +20,7 @@ from typing import Any, Dict, List, Optional, Union
 
 import numpy as np
 import torch
-from datasets import load_dataset
+from datasets import load_dataset,load_from_disk
 from PIL import Image
 from PIL.Image import Image as ImageObject
 from torch.utils.data import Dataset

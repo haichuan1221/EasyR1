@@ -15,6 +15,7 @@
 
 from .math import math_compute_score
 from .r1v import r1v_compute_score
+from .nl2sql import dsl_compute_score
 
 
-__all__ = ["math_compute_score", "r1v_compute_score"]
+__all__ = ["math_compute_score", "r1v_compute_score","dsl_compute_score"]

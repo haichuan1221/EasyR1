@@ -42,7 +42,7 @@ j2 = """
           "must": [
             {
               "term": {
-                "isSelfSent": true
+                "isSelfSent": false
               }
             },
             {
