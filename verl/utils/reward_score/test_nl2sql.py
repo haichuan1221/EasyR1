@@ -1,30 +1,24 @@
 from nl2sql import dsl_acc_reward
 
-j1 = {
+
+j1 = """
+{
+  "think": "用户想要搜索自己上周发送的所有邮件。需要在 EMAIL 表中查询 isSelfSent 为 true，并且 sendTime 在上周的时间范围内的邮件。",
   "bizDslQueryMap": {
-    "IM_MESSAGE": {
+    "EMAIL": {
       "query": {
         "bool": {
           "must": [
             {
               "term": {
-                "imApp": "Whatsapp"
-              }
-            },
-            {
-              "term": {
-                "messageContentType": 101
-              }
-            },
-            {
-              "match": {
-                "messageContent": "appointment"
+                "isSelfSent": true
               }
             },
             {
               "range": {
-                "sendTime": {
-                  "lt": "2025-10-14T00:00:00-07:00"
+                "receiveTime": {
+                  "gte": "2025-01-06T00:00:00+08:00",
+                  "lte": "2025-01-12T23:59:59+08:00"
                 }
               }
             }
@@ -33,42 +27,42 @@ j1 = {
       }
     }
   },
-  "unableSearch": False,
+  "unableSearch": false,
   "unableSearchMessage": ""
 }
+"""
 
-j2 = {
-    "bizDslQueryMap": {
-        "TODO": {
-            "query": {
-                "bool": {
-                    "must": [
-                      {
-                          "match": {
-                              "todoTitle": "email"
-                          }
-                      },
-                        {
-                          "term": {
-                              "isFinished": 1
-                          }
-                      },
-                        {
-                          "range": {
-                              "modifyTime": {
-                                  "gte": "2027-05-17T00:00:00-05:00"
-                              }
-                          }
-                      }
-                    ]
+j2 = """
+{
+  "think": "用户想要搜索自己上周发送的所有邮件。需要在 EMAIL 表中查询 isSelfSent 为 true，并且 sendTime 在上周的时间范围内的邮件。",
+  "bizDslQueryMap": {
+    "EMAIL": {
+      "query": {
+        "bool": {
+          "must": [
+            {
+              "term": {
+                "isSelfSent": true
+              }
+            },
+            {
+              "range": {
+                "receiveTime": {
+                  "gte": "2025-01-07T00:00:00+08:00",
+                  "lte": "2025-01-12T23:59:59+08:00"
                 }
+              }
             }
+          ]
         }
-    },
-    "unableSearch": False,
-    "unableSearchMessage": ""
+      }
+    }
+  },
+  "unableSearch": false,
+  "unableSearchMessage": ""
 }
+"""
 
 # 计算相似度
-similarity = dsl_acc_reward(str(j1), str(j1))
+similarity = dsl_acc_reward(j1, j2)
 print(f"DSL Similarity: {similarity:.4f}")

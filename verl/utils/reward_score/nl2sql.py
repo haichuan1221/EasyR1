@@ -9,9 +9,9 @@ def dsl_format_reward(predict_str: str) -> float:
     return 1.0 if format_match else 0.0
 
 
-def calculate_similarity(dsl1, dsl2):
+def calculate_similarity(dsl1 : dict , dsl2: dict) -> float:
     def compare(a, b):
-        if type(a) != type(b):
+        if not isinstance(a, type(b)):
             return 0, 1  # 类型不同，计为1个节点，0匹配
 
         if isinstance(a, dict):
@@ -26,12 +26,11 @@ def calculate_similarity(dsl1, dsl2):
                 b_has = key in b
 
                 if a_has and b_has:
-                    match += 1  # 键存在，匹配+1
+                    match += 1
                     m, t = compare(a[key], b[key])
                     child_match += m
                     child_total += t
                 else:
-                    # 处理仅存在于一个字典中的键
                     if a_has:
                         m, t = compare(a[key], None)
                     else:
@@ -77,5 +76,5 @@ def dsl_acc_reward(predict_str: str, ground_truth: str) -> float:
         return 0.0
 
 
-def math_compute_score(predict_str: str, ground_truth: str) -> float:
+def dsl_compute_score(predict_str: str, ground_truth: str) -> float:
     return 0.9 * dsl_acc_reward(predict_str, ground_truth) + 0.1 * dsl_format_reward(predict_str)
