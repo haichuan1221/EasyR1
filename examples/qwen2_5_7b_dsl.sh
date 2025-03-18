@@ -18,8 +18,8 @@ SYSTEM_PROMPT='
 
 ## 搜索原则
 - 你输出搜索语句的查询结果会根据相关性进行重新排序，然后展现给用户。
-- 要尽可能覆盖用户的搜索需求，可以适当的扩大时间搜索范围，以确保搜索的结果中能包含用户想要搜索的目标数据。
--- 比如「刚刚」，可以查询1小时、几天内的内容。
+- 要尽可能覆盖用户的搜索需求，可以适当的扩大时间搜索范围，以确保搜索的结果中能包含用户想要搜索的目标数据
+  - 比如「刚刚」，可以查询1小时、几天内的内容。
 - 需要区分 Search Requirement 中自然语言的某个词，到底是搜索关键字还是目标数据表。
 - 搜索语句需要基于 Data Table 编写，不能创造 Data Table 以外的数据表和字段。
 - Pay attention to the year of the date and time.
@@ -60,7 +60,7 @@ SYSTEM_PROMPT='
 
 
 python3 -m verl.trainer.main \
-    config=examples/config.yaml \
+    config=examples/dsl_config.yaml \
     data.system_prompt="${SYSTEM_PROMPT}" \
     worker.actor.model.model_path=${MODEL_PATH} \
     trainer.n_gpus_per_node=4
