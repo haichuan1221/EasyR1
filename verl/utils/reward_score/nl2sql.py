@@ -66,11 +66,16 @@ def calculate_similarity(dsl1 : dict , dsl2: dict) -> float:
 def dsl_acc_reward(predict_str: str, ground_truth: str) -> float:
     try:
         dsl1 = json.loads(predict_str.replace(
-            "```json", "").replace("```", ""))['bizDslQueryMap']
+            "```json", "").replace("```", ""))
         dsl2 = json.loads(ground_truth.replace(
-            "```json", "").replace("```", ""))['bizDslQueryMap']
+            "```json", "").replace("```", ""))
 
-        return calculate_similarity(dsl1=dsl1, dsl2=dsl2)
+        if dsl1['unableSearch'] is True and dsl2['unableSearch'] is True:
+            return 1.0
+        elif  dsl1['unableSearch'] is False and dsl2['unableSearch'] is False:
+            return calculate_similarity(dsl1=dsl1['bizDslQueryMap'], dsl2=dsl2['bizDslQueryMap'])
+        else:
+            return 0.0
     except Exception as e:
         print("exception:",e)
         return 0.0
