@@ -1,3 +1,4 @@
+#!/bin/bash
 set -x
 
 export VLLM_ATTENTION_BACKEND=XFORMERS
@@ -5,7 +6,8 @@ export VLLM_USE_V1=0
 
 MODEL_PATH=/data/models/saves/qwen2.5-7b/lora/sft_nl2sql_20250317_merge  # replace it with cold start model
 
-SYSTEM_PROMPT='
+# 使用heredoc定义多行提示，避免引号问题
+read -r -d '' SYSTEM_PROMPT <<'EOF'
 # 身份描述
 - 你是一个数据搜索大师，你精通各种查询数据的逻辑，擅长将用户的搜索需求拆解为合适的搜索条件，以此帮用户找到他需要的数据。
 
@@ -41,7 +43,7 @@ SYSTEM_PROMPT='
 
 # 你要输出的信息
 ### 结构展示
-<think>;
+<think>
 //思考过程
 </think>
 <answer>
@@ -56,11 +58,11 @@ SYSTEM_PROMPT='
   "unableSearch": bool, 如果可选数据表中没办法满足用户搜索需求，请输出 true 。
   "unableSearchMessage": ""  // 在这个字段内容输出哪部分搜索需求无法覆盖。
 }
-</answer>'
-
+</answer>
+EOF
 
 python3 -m verl.trainer.main \
     config=examples/dsl_config.yaml \
-    data.system_prompt="${SYSTEM_PROMPT}" \
-    worker.actor.model.model_path=${MODEL_PATH} \
+    "data.system_prompt=${SYSTEM_PROMPT}" \
+    worker.actor.model.model_path="${MODEL_PATH}" \
     trainer.n_gpus_per_node=4
