@@ -63,7 +63,19 @@ def calculate_similarity(dsl1 : dict , dsl2: dict) -> float:
     return match / total if total != 0 else 0.0
 
 
+def extract_answer_content(response_str : str) -> str:
+    answer_pattern = r"<answer>(.*?)</answer>"
+    answer_match = re.search(answer_pattern, response_str, re.DOTALL)
+    if answer_match:
+        return answer_match.group(1).strip()
+    else:
+        return "{}"
+
+
+
 def dsl_acc_reward(predict_str: str, ground_truth: str) -> float:
+    predict_str = extract_answer_content(predict_str)
+    ground_truth = extract_answer_content(ground_truth)
     try:
         dsl1 = json.loads(predict_str.replace(
             "```json", "").replace("```", ""))
